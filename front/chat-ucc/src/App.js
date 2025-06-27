@@ -68,7 +68,7 @@ Saludos!`;
                 return (
                     <div className="content-section">
                         <h1>🤖 Chatbot Personalizado UCC</h1>
-                        <p>Asistente virtual inteligente entrenado con información específica de la Universidad Cooperativa de Colombia</p>
+                        <p>Asistente virtual inteligente entrenado con información específica de la Universidad Cooperativa de Colombia. Por medio del asistente virtual puedes consultar requisitos de admisión, fechas claves, costos, becas, procesos y más información relevante.</p>
                         <div className="features-list">
                             <div className="feature-item">✅ Información académica actualizada</div>
                             <div className="feature-item">✅ Disponibilidad 24/7 a consultas de comunidades universitarias y externas</div>

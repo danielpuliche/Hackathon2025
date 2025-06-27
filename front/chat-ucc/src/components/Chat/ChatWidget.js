@@ -16,7 +16,16 @@ export default function ChatWidget() {
     const [needsUserType, setNeedsUserType] = useState(false);
     const [userType, setUserType] = useState(null);
     const [userOptions, setUserOptions] = useState([]);
+    const [showLanguageSelector, setShowLanguageSelector] = useState(false);
+    const [selectedLanguage, setSelectedLanguage] = useState('español');
     const messagesEndRef = useRef(null);
+
+    // Opciones de idioma disponibles
+    const languageOptions = [
+        { code: 'es', name: 'Español', flag: '🇪🇸', available: true },
+        { code: 'en', name: 'English', flag: '🇺🇸', available: false },
+        { code: 'ny', name: 'Nasa Yuwe', flag: '🏴', available: false }
+    ];
 
     // Cargar configuración de tema desde el backend (opcional)
     useEffect(() => {
@@ -35,16 +44,64 @@ export default function ChatWidget() {
         }
     }, [messages, open, minimized]);
 
+    // Renderizar selector de idiomas
+    const renderLanguageSelector = () => {
+        if (!showLanguageSelector) return null;
+
+        return (
+            <div className="ucc-language-selector">
+                <div className="language-dropdown">
+                    <div className="language-header">
+                        <h4>Seleccionar idioma</h4>
+                        <button
+                            className="close-language-selector"
+                            onClick={() => setShowLanguageSelector(false)}
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <div className="language-options">
+                        {languageOptions.map((option, index) => (
+                            <button
+                                key={index}
+                                className={`language-option ${option.available ? 'available' : 'disabled'}`}
+                                onClick={() => handleLanguageSelection(option)}
+                                disabled={!option.available}
+                            >
+                                <span className="language-flag">{option.flag}</span>
+                                <span className="language-name">{option.name}</span>
+                                {!option.available &&
+                                    <span className="development-badge">En desarrollo</span>
+                                }
+                                {option.name === selectedLanguage &&
+                                    <span className="selected-badge">✓</span>
+                                }
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     // Mostrar mensaje de confirmación de cierre dentro del widget
     if (open && showCloseConfirm && !minimized) {
         return (
             <div className="ucc-chat-widget">
+                {renderLanguageSelector()}
                 <div className="ucc-chat-header">
                     <div className="university-info">
                         <h3>Impulsa EDU-Tech</h3>
                         <p>UCC Popayán</p>
                     </div>
                     <div>
+                        <button
+                            className="ucc-chat-language"
+                            onClick={() => setShowLanguageSelector(!showLanguageSelector)}
+                            title="Cambiar idioma"
+                        >
+                            🌐
+                        </button>
                         <button className="ucc-chat-min" onClick={() => setMinimized(true)} title="Minimizar">_</button>
                         <button className="ucc-chat-close" onClick={() => setShowCloseConfirm(false)} title="Cancelar">&times;</button>
                     </div>
@@ -197,12 +254,20 @@ export default function ChatWidget() {
     if (open && !started && !minimized) {
         return (
             <div className="ucc-chat-widget">
+                {renderLanguageSelector()}
                 <div className="ucc-chat-header">
                     <div className="university-info">
                         <h3>Impulsa EDU-Tech</h3>
                         <p>UCC Popayán</p>
                     </div>
                     <div>
+                        <button
+                            className="ucc-chat-language"
+                            onClick={() => setShowLanguageSelector(!showLanguageSelector)}
+                            title="Cambiar idioma"
+                        >
+                            🌐
+                        </button>
                         <button className="ucc-chat-min" onClick={() => setMinimized(true)} title="Minimizar">_</button>
                         <button className="ucc-chat-close" onClick={handleClose} title="Cerrar">&times;</button>
                     </div>
@@ -341,6 +406,33 @@ export default function ChatWidget() {
         }
     };
 
+    // Función para manejar la selección de idioma
+    const handleLanguageSelection = (language) => {
+        if (language.available) {
+            setSelectedLanguage(language.name);
+            setShowLanguageSelector(false);
+        } else {
+            // Mostrar mensaje de "en desarrollo" para idiomas no disponibles
+            const developmentMsg = {
+                sender: 'bot',
+                text: `El idioma ${language.name} está en desarrollo. Próximamente estará disponible. Por ahora, continuaremos en español.`,
+                timestamp: new Date()
+            };
+            setMessages((msgs) => [...msgs, developmentMsg]);
+            setShowLanguageSelector(false);
+        }
+    };
+
+    // Función para manejar el botón de chat de voz
+    const handleVoiceChat = () => {
+        const voiceMsg = {
+            sender: 'bot',
+            text: 'El chat de voz está en desarrollo. Próximamente podrás usar esta funcionalidad para hablar directamente con el asistente virtual.',
+            timestamp: new Date()
+        };
+        setMessages((msgs) => [...msgs, voiceMsg]);
+    };
+
     // FAB minimizado
     if (!open || minimized) {
         return (
@@ -354,12 +446,20 @@ export default function ChatWidget() {
     // Chat abierto y activo
     return (
         <div className="ucc-chat-widget">
+            {renderLanguageSelector()}
             <div className="ucc-chat-header">
                 <div className="university-info">
                     <h3>Impulsa EDU-Tech</h3>
                     <p>UCC Popayán</p>
                 </div>
                 <div>
+                    <button
+                        className="ucc-chat-language"
+                        onClick={() => setShowLanguageSelector(!showLanguageSelector)}
+                        title="Cambiar idioma"
+                    >
+                        🌐
+                    </button>
                     <button className="ucc-chat-min" onClick={() => setMinimized(true)} title="Minimizar">_</button>
                     <button className="ucc-chat-close" onClick={handleClose} title="Cerrar">&times;</button>
                 </div>
@@ -370,17 +470,28 @@ export default function ChatWidget() {
                 <div ref={messagesEndRef} />
             </div>
             <form className="ucc-chat-form" onSubmit={sendMessage}>
-                <input
-                    className="ucc-chat-input"
-                    type="text"
-                    placeholder="Escribe tu pregunta..."
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    autoComplete="off"
-                    disabled={isLoading}
-                    required
-                />
+                <div className="input-container">
+                    <input
+                        className="ucc-chat-input"
+                        type="text"
+                        placeholder="Escribe tu pregunta..."
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        autoComplete="off"
+                        disabled={isLoading}
+                        required
+                    />
+                    <button
+                        className="ucc-voice-button"
+                        type="button"
+                        onClick={handleVoiceChat}
+                        title="Chat de voz (en desarrollo)"
+                        disabled={isLoading}
+                    >
+                        🎤
+                    </button>
+                </div>
                 <button
                     className="ucc-chat-send"
                     type="submit"
@@ -389,6 +500,7 @@ export default function ChatWidget() {
                     {isLoading ? '...' : 'Enviar'}
                 </button>
             </form>
+            {renderLanguageSelector()}
         </div>
     );
 }
