@@ -1,241 +1,234 @@
-# Backend Chatbot UCC - Con MongoDB
+# 🚀 Impulsa EDU-Tech Backend
 
-Backend del chatbot de la Universidad Cooperativa de Colombia usando Flask y MongoDB para almacenar el historial de conversaciones.
+**Asistente virtual con IA para la Universidad Cooperativa de Colombia - Campus Popayán**
 
-## 🚀 Características
+## 📋 Descripción
 
-- **API REST** con Flask
-- **Almacenamiento en MongoDB** para historiales de chat
-- **Clasificación automática** de conversaciones por etiquetas
-- **Respaldo en archivos JSON** como fallback
-- **Integración con Cohere** para respuestas de IA
-- **CORS habilitado** para peticiones desde frontend
+Backend moderno desarrollado en **Flask** que proporciona un chatbot inteligente alimentado por **Cohere AI**. Incluye integración con **Telegram Bot** y almacenamiento en **MongoDB** para historiales de conversación.
 
-## 📁 Estructura del Proyecto
+## 🏗️ Estructura del Proyecto
 
 ```
 back/
-├── app.py                 # Aplicación principal Flask
-├── database.py           # Módulo de conexión a MongoDB
-├── migrate_to_mongodb.py # Script para migrar datos existentes
-├── setup_mongodb.sh      # Script de instalación de MongoDB
-├── requirements.txt      # Dependencias Python
-├── .env.example         # Ejemplo de configuración
-└── chat_histories/      # Respaldo local (JSON)
+├── app.py                    # Aplicación principal Flask
+├── requirements.txt          # Dependencias de Python
+├── .env                     # Variables de entorno (no versionado)
+├── .env.example             # Plantilla de variables de entorno
+│
+├── src/                     # Código fuente organizado
+│   ├── config/              # Configuración de la aplicación
+│   │   ├── settings.py      # Configuraciones por ambiente
+│   │   └── constants.py     # Constantes globales
+│   │
+│   ├── models/              # Modelos de datos
+│   │   └── chat_models.py   # Modelos para chat y conversaciones
+│   │
+│   ├── routes/              # Rutas de la API REST
+│   │   ├── chatbot_routes.py      # Endpoints del chatbot
+│   │   └── conversation_routes.py # Endpoints de conversaciones
+│   │
+│   ├── services/            # Lógica de negocio
+│   │   ├── chatbot_service.py     # Servicio principal del chatbot
+│   │   ├── database.py            # Conexión y operaciones de BD
+│   │   └── telegram_bot.py        # Bot de Telegram integrado
+│   │
+│   └── utils/               # Utilidades y helpers
+│       ├── helpers.py             # Funciones auxiliares
+│       └── migrate_to_mongodb.py  # Script de migración de datos
+│
+├── tests/                   # Pruebas unitarias
+├── docs/                    # Documentación adicional
+├── chat_histories/          # Archivos locales de chat (respaldo)
+└── venv/                    # Entorno virtual de Python
 ```
 
-## ⚙️ Configuración
+## 🚀 Inicio Rápido
 
-### 1. Instalar Dependencias
+### 1. Desde la raíz del proyecto (recomendado):
 
 ```bash
-# Crear entorno virtual (recomendado)
-python -m venv venv
-source venv/bin/activate  # En Linux/Mac
-# venv\Scripts\activate   # En Windows
-
-# Instalar dependencias
-pip install -r requirements.txt
+# Ejecutar todo el sistema con un solo comando
+./start_backend.sh
 ```
 
-### 2. Configurar Variables de Entorno
+Este script automatiza:
+- ✅ Activación del entorno virtual
+- ✅ Inicio del backend Flask (puerto 8000)
+- ✅ Inicio del bot de Telegram (puerto 9000)
+- ✅ Configuración automática de ngrok
+- ✅ Configuración del webhook de Telegram
+- ✅ Monitoreo de todos los procesos
 
-Copia el archivo `.env.example` a `.env` y configura las variables:
+### 2. Inicio manual (desarrollo):
 
 ```bash
-cp .env.example .env
-```
-
-Edita el archivo `.env`:
-
-```env
-# Configuración de Cohere
-COHERE_API_KEY=tu_clave_de_cohere_aqui
-
-# Configuración de Flask
-FLASK_SECRET_KEY=supersecretkey
-
-# Configuración de MongoDB
-# Opción 1: MongoDB local
-MONGODB_URI=mongodb://localhost:27017/
-
-# Opción 2: MongoDB Atlas (cloud)
-# MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/
-
-# Nombre de la base de datos
-DATABASE_NAME=chatbot_ucc
-```
-
-### 3. Configurar MongoDB
-
-#### Opción A: MongoDB Local
-
-Ejecuta el script de instalación (Ubuntu/Debian):
-
-```bash
-./setup_mongodb.sh
-```
-
-O instala manualmente siguiendo la [documentación oficial](https://docs.mongodb.com/manual/installation/).
-
-#### Opción B: MongoDB Atlas (Cloud)
-
-1. Crea una cuenta en [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Crea un cluster gratuito
-3. Obtén la cadena de conexión
-4. Actualiza `MONGODB_URI` en tu archivo `.env`
-
-## 🔄 Migración de Datos Existentes
-
-Si ya tienes historiales en archivos JSON, puedes migrarlos a MongoDB:
-
-```bash
-python migrate_to_mongodb.py
-```
-
-Este script:
-- ✅ Crea un respaldo de tus archivos JSON
-- ✅ Migra todos los historiales a MongoDB
-- ✅ Verifica que la migración fue exitosa
-
-## 🚀 Ejecutar el Servidor
-
-```bash
-# Activar entorno virtual
+# 1. Activar entorno virtual
+cd back
 source venv/bin/activate
 
-# Ejecutar servidor
+# 2. Instalar dependencias (primera vez)
+pip install -r requirements.txt
+
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus credenciales
+
+# 4. Iniciar solo el backend
 python app.py
+
+# 5. En otra terminal, iniciar bot de Telegram (opcional)
+python src/services/telegram_bot.py
 ```
 
-El servidor estará disponible en `http://localhost:8000`
+## 🔧 Configuración
 
-## 📚 API Endpoints
+### Variables de Entorno Requeridas
 
-### Chat
-
-- **POST** `/ask` - Enviar pregunta al chatbot
-- **GET** `/conversations` - Obtener todas las conversaciones
-- **GET** `/conversations/<id>` - Obtener conversación específica
-- **DELETE** `/conversations/<id>` - Eliminar conversación
-- **GET** `/conversations/by-label/<label>` - Filtrar por etiqueta
-
-### Ejemplo de uso:
+Crea un archivo `.env` basado en `.env.example`:
 
 ```bash
-# Enviar pregunta
+# API Keys
+COHERE_API_KEY=tu_api_key_de_cohere
+
+# Telegram Bot (opcional)
+TELEGRAM_TOKEN=tu_token_del_bot_telegram
+
+# Base de datos MongoDB (opcional)
+MONGODB_URI=mongodb://localhost:27017/impulsa_edutech
+MONGODB_DB_NAME=impulsa_edutech
+
+# Configuración del servidor
+FLASK_ENV=development
+HOST=0.0.0.0
+PORT=8000
+DEBUG=true
+```
+
+### Obtener API Keys
+
+1. **Cohere AI**: Registrarse en [cohere.ai](https://cohere.ai) y obtener API key
+2. **Telegram Bot**: Crear bot con [@BotFather](https://t.me/botfather) en Telegram
+3. **MongoDB**: Usar MongoDB local o servicio como MongoDB Atlas
+
+## 📡 API Endpoints
+
+### Chatbot
+- `POST /ask` - Enviar pregunta al chatbot
+- `GET /health` - Estado del sistema
+
+### Conversaciones
+- `GET /conversations` - Listar todas las conversaciones
+- `GET /conversations/{id}` - Obtener conversación específica
+- `DELETE /conversations/{id}` - Eliminar conversación
+- `GET /conversations/by-label/{label}` - Buscar por etiqueta
+
+### Ejemplos de uso
+
+```bash
+# Preguntar al chatbot
 curl -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "¿Cómo me matriculo?", "conversation_id": "opcional"}'
+  -d '{"question": "¿Qué carreras ofrece la universidad?", "conversation_id": "opcional"}'
 
-# Obtener conversaciones
-curl http://localhost:8000/conversations
-
-# Obtener conversaciones sobre matrículas
-curl http://localhost:8000/conversations/by-label/Matrículas
+# Ver estado del sistema
+curl http://localhost:8000/health
 ```
 
-## 🏷️ Etiquetas Automáticas
+## 🤖 Bot de Telegram
 
-El sistema clasifica automáticamente las conversaciones con estas etiquetas:
+El bot de Telegram se integra automáticamente con el backend y permite:
 
-- **Matrículas** - Inscripciones, matricular
-- **Admisiones** - Proceso de admisión
-- **Biblioteca** - Préstamos, libros
-- **Pagos** - Cuotas, facturas
-- **Programas** - Carreras, ingeniería
-- **Becas** - Descuentos, financiamiento
-- **Calendario** - Fechas, cronogramas
-- **Soporte** - Ayuda, problemas
+- ✅ Conversaciones naturales con el chatbot
+- ✅ Historial de conversaciones por usuario
+- ✅ Respuestas contextuales
+- ✅ Configuración automática de webhook con ngrok
 
-## 🧹 Limpieza de Datos de Test
+## 🗄️ Base de Datos
 
-Los scripts de prueba ahora eliminan automáticamente los datos de test para mantener la base de datos limpia:
+### MongoDB (Recomendado)
+- Almacenamiento robusto y escalable
+- Búsquedas eficientes
+- Respaldo automático
 
-### Scripts con Auto-limpieza
-- ✅ `test_chatbot.py` - Elimina conversaciones de test automáticamente
-- ✅ `setup_bot.py` - Limpia tests del bot de Telegram
-- ✅ API endpoint `/conversations/cleanup-tests` - Limpieza manual
+### Archivos JSON (Respaldo)
+- Sistema de respaldo local en `chat_histories/`
+- Se activa automáticamente si MongoDB no está disponible
 
-### Limpieza Manual
+## 🧪 Testing
+
 ```bash
-# Limpiar todas las conversaciones de test
-python cleanup_tests.py
+# Ejecutar pruebas
+cd back
+python -m pytest tests/
 
-# O usar el endpoint API
-curl -X DELETE http://localhost:8000/conversations/cleanup-tests
+# Ejecutar con coverage
+python -m pytest tests/ --cov=src/
 ```
 
-### Identificación de Tests
-Las conversaciones de test se identifican por:
-- ID que empieza con `test_`
-- ID que contiene `temp_`
-- Creadas por scripts de prueba
+## 📦 Dependencias Principales
 
-## 🔧 Troubleshooting
+- **Flask**: Framework web minimalista
+- **Cohere**: API de inteligencia artificial
+- **PyMongo**: Cliente de MongoDB
+- **Flask-CORS**: Manejo de CORS para frontend
+- **python-telegram-bot**: SDK de Telegram
+- **python-dotenv**: Manejo de variables de entorno
 
-### Error de conexión a MongoDB
+## 🔒 Seguridad
 
-```
-ERROR: No hay conexión a MongoDB
-```
+- ✅ Variables de entorno para credenciales
+- ✅ Validación de entrada de usuarios
+- ✅ Sanitización de datos
+- ✅ CORS configurado correctamente
 
-**Soluciones:**
+## 📈 Monitoreo
 
-1. **MongoDB local**: Verifica que esté ejecutándose
-   ```bash
-   sudo systemctl status mongod
-   sudo systemctl start mongod
-   ```
+El sistema incluye:
+- ✅ Logs detallados en consola
+- ✅ Endpoint de salud `/health`
+- ✅ Monitoreo automático de procesos
+- ✅ Limpieza automática al detener servicios
 
-2. **MongoDB Atlas**: Verifica la cadena de conexión y credenciales
+## 🚫 Detener Servicios
 
-3. **Red**: Asegúrate de que no haya firewalls bloqueando
+Para detener todos los servicios iniciados con `start_backend.sh`:
+- Presiona `Ctrl+C` en la terminal donde se ejecuta el script
+- Todos los procesos se detendrán automáticamente
 
-### Error de dependencias
+## 🆘 Solución de Problemas
 
-```
-ModuleNotFoundError: No module named 'pymongo'
-```
-
-**Solución:**
+### El backend no inicia
 ```bash
-pip install -r requirements.txt
+# Verificar puerto ocupado
+lsof -i :8000
+
+# Verificar dependencias
+pip list | grep flask
 ```
 
-### Fallback a archivos JSON
+### El bot de Telegram no funciona
+```bash
+# Verificar token
+echo $TELEGRAM_TOKEN
 
-Si MongoDB no está disponible, el sistema automáticamente usará archivos JSON como respaldo.
+# Verificar ngrok
+curl http://localhost:4040/api/tunnels
+```
 
-## 🌟 Características Avanzadas
+### MongoDB no conecta
+```bash
+# Verificar servicio local
+sudo systemctl status mongod
 
-### Respaldo Automático
-
-- MongoDB como almacenamiento principal
-- Archivos JSON como respaldo automático
-- Sin pérdida de datos si MongoDB falla
-
-### Escalabilidad
-
-- Base de datos MongoDB optimizada para grandes volúmenes
-- Índices automáticos para búsquedas rápidas
-- Soporte para clustering y replicación
-
-### Monitoreo
-
-- Logs detallados de todas las operaciones
-- Métricas de uso y rendimiento
-- Alertas automáticas de errores
+# O usar MongoDB Atlas (recomendado)
+```
 
 ## 📞 Soporte
 
-Para problemas o dudas:
+**Universidad Cooperativa de Colombia - Campus Popayán**
 
-1. Revisa los logs en la consola
-2. Verifica la configuración en `.env`
-3. Consulta la documentación de [MongoDB](https://docs.mongodb.com/)
-4. Consulta la documentación de [Cohere](https://docs.cohere.ai/)
+Para soporte técnico, consulta la documentación en el directorio `docs/` o contacta al equipo de desarrollo.
 
 ---
 
-**¡Chatbot UCC listo para funcionar con MongoDB! 🎉**
+*Desarrollado con ❤️ para la comunidad educativa UCC Popayán*
