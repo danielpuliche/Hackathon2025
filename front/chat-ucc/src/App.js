@@ -11,13 +11,32 @@ function App() {
         setAdminSubSection(null); // Reset sub-section when changing main section
     };
 
+    // Función para generar enlace de WhatsApp
+    const getWhatsAppLink = () => {
+        const phoneNumber = "573122144541";
+        const message = `Hola! 👋 
+        
+Estoy interesado en los servicios de consultoría EDU-Tech de Impulsa para la Universidad Cooperativa de Colombia.
+
+Me gustaría conocer más sobre:
+• Optimización de plataformas educativas
+• Mejora de atención estudiantil
+• Análisis de datos educativos
+
+¿Podríamos agendar una consulta personalizada?
+
+Saludos!`;
+
+        return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    };
+
     const renderContent = () => {
         switch (activeSection) {
             case 'overview':
                 return (
                     <div className="content-section">
                         <div className="hero-section">
-                            <h1>� Bienvenido a Impulsa EDU-Tech</h1>
+                            <h1>Bienvenido a Impulsa EDU-Tech</h1>
                             <p className="hero-subtitle">Transformando la educación superior con tecnología innovadora</p>
 
                             <div className="services-grid">
@@ -52,10 +71,19 @@ function App() {
                         <p>Asistente virtual inteligente entrenado con información específica de la Universidad Cooperativa de Colombia</p>
                         <div className="features-list">
                             <div className="feature-item">✅ Información académica actualizada</div>
-                            <div className="feature-item">✅ Respuestas 24/7 a consultas estudiantiles</div>
+                            <div className="feature-item">✅ Disponibilidad 24/7 a consultas de comunidades universitarias y externas</div>
                             <div className="feature-item">✅ Integración con sistemas institucionales</div>
                             <div className="feature-item">✅ Clasificación automática de solicitudes</div>
                         </div>
+
+                        <div className="demo-invitation">
+                            <h3>🚀 ¡Prueba el ChatBot en Acción!</h3>
+                            <p>Haz clic en el botón de chat flotante (💬) en la esquina inferior derecha para explorar las capacidades del asistente virtual. ¡Pregúntale cualquier cosa sobre la Universidad Cooperativa!</p>
+                            <div className="demo-arrow">
+                                ↘️ <strong>¡Inicia una conversación ahora!</strong>
+                            </div>
+                        </div>
+
                         <ChatWidget />
                     </div>
                 );
@@ -121,7 +149,8 @@ function App() {
                             <div className="consulting-card">
                                 <div className="consulting-icon">📞</div>
                                 <h3>Mejora de Atención</h3>
-                                <p>Estrategias para reducir tiempos de respuesta y aumentar la satisfacción estudiantil</p>
+                                <p>Implementar estrategias de mejora en la atención al estudiantes y la comunidad externa
+                                </p>
                                 <ul>
                                     <li>Automatización de procesos</li>
                                     <li>Chatbots especializados</li>
@@ -143,32 +172,15 @@ function App() {
 
                         <div className="cta-section">
                             <h3>¿Listo para transformar su institución?</h3>
-                            <p>Contáctenos para una consulta personalizada</p>
-                            <button className="btn-cta">Solicitar Consulta</button>
-                        </div>
-                    </div>
-                );
-            case 'settings':
-                return (
-                    <div className="content-section">
-                        <h1>⚙️ Configuración del Sistema</h1>
-                        <p>Ajustes y configuraciones de la plataforma Impulsa EDU-Tech</p>
-
-                        <div className="settings-sections">
-                            <div className="setting-group">
-                                <h3>🔧 Configuración General</h3>
-                                <p>Ajustes básicos del sistema</p>
-                            </div>
-
-                            <div className="setting-group">
-                                <h3>🎨 Personalización</h3>
-                                <p>Temas, colores y branding institucional</p>
-                            </div>
-
-                            <div className="setting-group">
-                                <h3>🔐 Seguridad y Accesos</h3>
-                                <p>Gestión de permisos y autenticación</p>
-                            </div>
+                            <p>Contáctenos para una consulta personalizada y descubra cómo Impulsa EDU-Tech puede optimizar su infraestructura educativa</p>
+                            <a
+                                href={getWhatsAppLink()}
+                                className="btn-cta"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                📱 Solicitar Consulta por WhatsApp
+                            </a>
                         </div>
                     </div>
                 );

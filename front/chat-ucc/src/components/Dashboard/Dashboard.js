@@ -21,11 +21,11 @@ const Dashboard = ({ onBack }) => {
             satisfaction: 4.2,
             avgResolutionTime: '2.3 min'
         },
-        recentConversations: [
-            { id: 1, user: 'Estudiante #1234', category: 'Admisiones', status: 'Resuelto', time: '10:30 AM' },
-            { id: 2, user: 'Estudiante #5678', category: 'Académica', status: 'Pendiente', time: '10:15 AM' },
-            { id: 3, user: 'Docente #9012', category: 'Servicios', status: 'Resuelto', time: '10:00 AM' },
-            { id: 4, user: 'Estudiante #3456', category: 'Pagos', status: 'Escalado', time: '09:45 AM' }
+        conversationStatus: [
+            { name: 'Resueltos', value: 687, percentage: 55, color: '#48bb78' },
+            { name: 'Pendientes', value: 312, percentage: 25, color: '#ed8936' },
+            { name: 'En Proceso', value: 186, percentage: 15, color: '#667eea' },
+            { name: 'Escalados', value: 62, percentage: 5, color: '#e53e3e' }
         ]
     };
 
@@ -64,6 +64,35 @@ const Dashboard = ({ onBack }) => {
                     <span className="pie-total">{total}</span>
                     <span className="pie-label">Total</span>
                 </div>
+            </div>
+        );
+    };
+
+    // Función para renderizar el gráfico de estado de conversaciones
+    const renderStatusChart = () => {
+        const maxValue = Math.max(...mockData.conversationStatus.map(item => item.value));
+
+        return (
+            <div className="status-chart">
+                {mockData.conversationStatus.map((status, index) => (
+                    <div key={index} className="status-bar-container">
+                        <div className="status-info">
+                            <span className="status-name">{status.name}</span>
+                            <span className="status-count">{status.value}</span>
+                        </div>
+                        <div className="status-bar-wrapper">
+                            <div
+                                className="status-bar"
+                                style={{
+                                    width: `${(status.value / maxValue) * 100}%`,
+                                    backgroundColor: status.color
+                                }}
+                            >
+                                <span className="status-percentage">{status.percentage}%</span>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
         );
     };
@@ -146,19 +175,10 @@ const Dashboard = ({ onBack }) => {
                     </div>
                 </div>
 
-                <div className="conversations-section">
-                    <h3>Conversaciones Recientes</h3>
-                    <div className="conversations-list">
-                        {mockData.recentConversations.map((conv) => (
-                            <div key={conv.id} className="conversation-item">
-                                <div className="conv-user">{conv.user}</div>
-                                <div className="conv-category">{conv.category}</div>
-                                <div className={`conv-status status-${conv.status.toLowerCase()}`}>
-                                    {conv.status}
-                                </div>
-                                <div className="conv-time">{conv.time}</div>
-                            </div>
-                        ))}
+                <div className="status-section">
+                    <h3>Estado de Conversaciones</h3>
+                    <div className="status-container">
+                        {renderStatusChart()}
                     </div>
                 </div>
             </div>

@@ -9,9 +9,11 @@
 .main-content {
   flex: 1;
   margin-left: 260px;
-  padding: 32px;
+  padding: 24px 32px 16px 32px;
   overflow-y: auto;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .content-section {
@@ -55,10 +57,10 @@
 
 .service-card {
   background: white;
-  border-radius: 16px;
+  border-radius: var(--border-radius-lg);
   padding: 32px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
   transition: all 0.3s ease;
   cursor: pointer;
   text-align: center;
@@ -66,8 +68,8 @@
 
 .service-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border-color: #667eea;
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-secondary);
 }
 
 .service-icon {
@@ -78,20 +80,20 @@
 
 .service-card h3 {
   font-size: 1.5rem;
-  color: #2d3748;
+  color: var(--color-primary);
   margin-bottom: 12px;
   font-weight: 600;
 }
 
 .service-card p {
-  color: #64748b;
+  color: var(--gray-600);
   line-height: 1.6;
   margin-bottom: 20px;
   font-size: 1rem;
 }
 
 .service-cta {
-  color: #667eea;
+  color: var(--color-secondary);
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -99,16 +101,17 @@
 /* Features List */
 .features-list {
   background: white;
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   padding: 24px;
   margin-bottom: 32px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
 }
 
 .feature-item {
   padding: 8px 0;
   font-size: 1.1rem;
-  color: #2d3748;
+  color: var(--color-text);
 }
 
 /* Admin Modules */
@@ -121,44 +124,48 @@
 
 .module-card {
   background: white;
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
   transition: all 0.3s ease;
 }
 
 .module-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-secondary);
 }
 
 .module-card h3 {
-  color: #2d3748;
+  color: var(--color-primary);
   margin-bottom: 8px;
   font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .module-card p {
-  color: #64748b;
+  color: var(--gray-600);
   margin-bottom: 16px;
   font-size: 0.95rem;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-secondary);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
+  background: var(--color-secondary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: var(--shadow-md);
 }
 
 /* Consulting Services */
@@ -171,17 +178,18 @@
 
 .consulting-card {
   background: white;
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
   text-align: center;
   transition: all 0.3s ease;
 }
 
 .consulting-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-secondary);
 }
 
 .consulting-icon {
@@ -191,29 +199,221 @@
 }
 
 .consulting-card h3 {
-  color: #2d3748;
+  color: var(--color-primary);
   margin-bottom: 12px;
   font-size: 1.3rem;
+  font-weight: 600;
 }
 
 .consulting-card p {
-  color: #64748b;
+  color: var(--gray-600);
   font-size: 0.95rem;
   line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  margin-top: 48px;
+  padding: 32px;
+  background: var(--color-background);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.cta-section h3 {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.cta-section p {
+  color: var(--gray-600);
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+
+.btn-cta {
+  background: var(--color-secondary);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-cta:hover {
+  background: var(--color-secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-cta:active {
+  transform: translateY(0);
+}
+
+/* Demo Invitation */
+.demo-invitation {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary-dark));
+  color: white;
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  text-align: center;
+  margin-top: 24px;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--color-secondary);
+  animation: pulse-glow 2s infinite;
+}
+
+.demo-invitation h3 {
+  color: white;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.demo-invitation p {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.demo-arrow {
+  color: white;
+  font-size: 1.1rem;
+  margin-top: 8px;
+  animation: bounce-arrow 1.5s infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: var(--shadow-lg);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+  }
+}
+
+@keyframes bounce-arrow {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .main-content {
     margin-left: 70px;
-    padding: 20px 16px;
+    padding: 16px 12px 12px 12px;
+    height: 100vh;
   }
   
   .content-section h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 4px;
   }
   
   .content-section p {
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+  }
+  
+  .hero-section {
+    padding: 12px 0 16px 0;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .service-card {
+    padding: 20px;
+  }
+  
+  .service-icon {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .service-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .cta-section {
+    margin-top: 20px;
+    padding: 20px;
+  }
+  
+  .cta-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .cta-section p {
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+  }
+  
+  .btn-cta {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+  }
+  
+  .demo-invitation {
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .demo-invitation h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .demo-invitation p {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+  }
+  
+  .demo-arrow {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    margin-left: 70px;
+    padding: 12px 8px 8px 8px;
+  }
+  
+  .services-grid {
+    gap: 12px;
+  }
+  
+  .service-card {
+    padding: 16px;
   }
 }

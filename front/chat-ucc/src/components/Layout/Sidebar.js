@@ -1,5 +1,6 @@
 import React from 'react';
 import './Sidebar.css';
+import logo from '../../assets/logos/logo.png';
 
 const Sidebar = ({ activeSection, onSectionChange }) => {
     const menuItems = [
@@ -12,26 +13,20 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
         {
             id: 'chatbot',
             icon: '🤖',
-            label: 'Chatbot Personalizado',
-            description: 'Asistente virtual con información institucional'
+            label: 'Asistente Virtual Personalizado',
+            description: 'Chatbot con información institucional'
         },
         {
             id: 'admin',
             icon: '📊',
             label: 'Gestión Administrativa',
-            description: 'Gestionar conversaciones y solicitudes'
+            description: 'Herramientas para administradores'
         },
         {
             id: 'consulting',
-            icon: '�',
+            icon: '💡',
             label: 'Consultoría',
-            description: 'Asesoría para mejora de plataformas'
-        },
-        {
-            id: 'settings',
-            icon: '⚙️',
-            label: 'Configuración',
-            description: 'Ajustes del sistema'
+            description: 'Servicios de asesoría especializada'
         }
     ];
 
@@ -39,7 +34,9 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
         <div className="sidebar">
             <div className="sidebar-header">
                 <div className="logo">
-                    <span className="logo-icon">🚀</span>
+                    <div className="logo-icon">
+                        <img src={logo} alt="Impulsa EDU-Tech" className="logo-image" />
+                    </div>
                     <span className="logo-text">Impulsa EDU-Tech</span>
                 </div>
                 <div className="logo-subtitle">
@@ -60,13 +57,6 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
                     </button>
                 ))}
             </nav>
-
-            <div className="sidebar-footer">
-                <div className="user-info">
-                    <span className="user-icon">👤</span>
-                    <span className="user-name">Administrador</span>
-                </div>
-            </div>
         </div>
     );
 };
