@@ -1,0 +1,16 @@
+/* Conversation Dashboard Styles */
+.conversation-dashboard {
+    padding: 24px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.conversation-dashboard h2 {
+    color: #2d3748;
+    margin-bottom: 16px;
+}
+
+.conversation-dashboard p {
+    color: #64748b;
+}
