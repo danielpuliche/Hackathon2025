@@ -22,8 +22,9 @@ class ChatConversation:
     id_chat: str
     history: List[Dict]
     labels: List[str]
-    created_at: datetime
-    updated_at: datetime
+    user_type: Optional[str] = None  # Nuevo campo para tipo de usuario
+    created_at: datetime = None
+    updated_at: datetime = None
     
     def to_dict(self) -> Dict:
         """Convertir a diccionario para JSON"""
@@ -39,6 +40,7 @@ class ChatConversation:
             id_chat=data.get('id_chat', ''),
             history=data.get('history', []),
             labels=data.get('labels', []),
+            user_type=data.get('user_type'),
             created_at=data.get('created_at'),
             updated_at=data.get('updated_at')
         )

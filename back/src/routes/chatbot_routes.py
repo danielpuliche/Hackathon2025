@@ -15,8 +15,9 @@ def create_chatbot_routes(chatbot_service: ChatbotService) -> Blueprint:
         data = request.get_json()
         question = data.get("question", "")
         conv_id = data.get("conversation_id")
+        user_type = data.get("user_type")
         
-        response = chatbot_service.generate_response(question, conv_id)
+        response = chatbot_service.generate_response(question, conv_id, user_type)
         return jsonify(response)
     
     return chatbot_bp

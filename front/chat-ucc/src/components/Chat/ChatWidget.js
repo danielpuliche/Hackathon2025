@@ -13,6 +13,9 @@ export default function ChatWidget() {
     const [minimized, setMinimized] = useState(false);
     const [showCloseConfirm, setShowCloseConfirm] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [needsUserType, setNeedsUserType] = useState(false);
+    const [userType, setUserType] = useState(null);
+    const [userOptions, setUserOptions] = useState([]);
     const messagesEndRef = useRef(null);
 
     // Cargar configuración de tema desde el backend (opcional)
@@ -57,6 +60,9 @@ export default function ChatWidget() {
                                 setStarted(false);
                                 setMessages([]);
                                 setConversationId(null);
+                                setUserType(null);
+                                setNeedsUserType(false);
+                                setUserOptions([]);
                                 setOpen(false);
                                 setMinimized(false);
                                 setShowCloseConfirm(false);
@@ -83,15 +89,47 @@ export default function ChatWidget() {
         }
     };
 
-    const startChat = () => {
+    const startChat = async () => {
         if (!started) {
-            const welcomeMsg = {
-                sender: 'bot',
-                text: '¡Hola! Soy tu asistente virtual de Impulsa EDU-Tech. ¿En qué puedo ayudarte hoy?',
-                timestamp: new Date()
-            };
-            setMessages([welcomeMsg]);
             setStarted(true);
+            setIsLoading(true);
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question: "",
+                        conversation_id: null
+                    })
+                });
+
+                const data = await res.json();
+                setConversationId(data.conversation_id);
+
+                if (data.needs_user_type) {
+                    setNeedsUserType(true);
+                    setUserOptions(data.user_options || []);
+                }
+
+                const welcomeMsg = {
+                    sender: 'bot',
+                    text: data.answer,
+                    timestamp: new Date()
+                };
+                setMessages([welcomeMsg]);
+
+            } catch (error) {
+                console.error('Error iniciando chat:', error);
+                const errorMsg = {
+                    sender: 'bot',
+                    text: 'Error al conectar con el asistente. Por favor, intenta nuevamente.',
+                    timestamp: new Date()
+                };
+                setMessages([errorMsg]);
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -129,6 +167,28 @@ export default function ChatWidget() {
                         {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                 )}
+            </div>
+        );
+    };
+
+    // Renderizar opciones de tipo de usuario
+    const renderUserTypeOptions = () => {
+        if (!needsUserType || userOptions.length === 0) return null;
+
+        return (
+            <div className="ucc-user-type-selection">
+                <div className="user-type-buttons">
+                    {userOptions.map((option, index) => (
+                        <button
+                            key={index}
+                            className="user-type-button"
+                            onClick={() => handleUserTypeSelection(option)}
+                            disabled={isLoading}
+                        >
+                            {option}
+                        </button>
+                    ))}
+                </div>
             </div>
         );
     };
@@ -191,7 +251,8 @@ export default function ChatWidget() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     question: userMsg.text,
-                    conversation_id: conversationId
+                    conversation_id: conversationId,
+                    user_type: userType
                 })
             });
 
@@ -214,6 +275,64 @@ export default function ChatWidget() {
                 {
                     sender: 'bot',
                     text: 'Error al conectar con el asistente. Por favor, intenta nuevamente.',
+                    timestamp: new Date()
+                }
+            ]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleUserTypeSelection = async (selectedType) => {
+        setUserType(selectedType);
+        setNeedsUserType(false);
+        setIsLoading(true);
+
+        // Agregar mensaje del usuario
+        const userMsg = {
+            sender: 'user',
+            text: selectedType,
+            timestamp: new Date()
+        };
+        setMessages((msgs) => [...msgs, userMsg]);
+
+        // Agregar indicador de escritura
+        const typingMsg = {
+            sender: 'bot',
+            text: '',
+            isTyping: true
+        };
+        setMessages((msgs) => [...msgs, typingMsg]);
+
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question: selectedType,
+                    conversation_id: conversationId,
+                    user_type: selectedType
+                })
+            });
+
+            const data = await res.json();
+
+            // Reemplazar indicador de escritura con respuesta
+            setMessages((msgs) => [
+                ...msgs.slice(0, -1),
+                {
+                    sender: 'bot',
+                    text: data.answer,
+                    timestamp: new Date()
+                }
+            ]);
+        } catch (error) {
+            console.error('Error enviando selección de usuario:', error);
+            setMessages((msgs) => [
+                ...msgs.slice(0, -1),
+                {
+                    sender: 'bot',
+                    text: 'Error al procesar tu selección. Por favor, intenta nuevamente.',
                     timestamp: new Date()
                 }
             ]);
@@ -247,6 +366,7 @@ export default function ChatWidget() {
             </div>
             <div className="ucc-chat-messages">
                 {messages.map((msg, i) => renderMessage(msg, i))}
+                {renderUserTypeOptions()}
                 <div ref={messagesEndRef} />
             </div>
             <form className="ucc-chat-form" onSubmit={sendMessage}>

@@ -33,7 +33,7 @@ class ChatHistoryDB:
         """Verificar si hay conexión a MongoDB"""
         return self.client is not None and self.db is not None
 
-    def save_chat_history(self, conversation_id, history, labels):
+    def save_chat_history(self, conversation_id, history, labels, user_type=None):
         """Guardar o actualizar el historial de chat"""
         if not self.is_connected():
             logger.error("No hay conexión a MongoDB")
@@ -44,19 +44,25 @@ class ChatHistoryDB:
                 "id_chat": conversation_id,
                 "history": history,
                 "labels": labels,
+                "user_type": user_type,
                 "updated_at": datetime.utcnow(),
                 "created_at": datetime.utcnow()
             }
             
             # Usar upsert para actualizar si existe o crear si no existe
+            update_data = {
+                "history": history,
+                "labels": labels,
+                "updated_at": datetime.utcnow()
+            }
+            
+            if user_type is not None:
+                update_data["user_type"] = user_type
+            
             result = self.collection.update_one(
                 {"id_chat": conversation_id},
                 {
-                    "$set": {
-                        "history": history,
-                        "labels": labels,
-                        "updated_at": datetime.utcnow()
-                    },
+                    "$set": update_data,
                     "$setOnInsert": {"created_at": datetime.utcnow()}
                 },
                 upsert=True
@@ -81,7 +87,8 @@ class ChatHistoryDB:
                 return {
                     "id_chat": result["id_chat"],
                     "history": result.get("history", []),
-                    "labels": result.get("labels", [])
+                    "labels": result.get("labels", []),
+                    "user_type": result.get("user_type")
                 }
             return None
             

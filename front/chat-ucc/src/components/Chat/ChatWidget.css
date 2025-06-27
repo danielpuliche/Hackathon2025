@@ -445,6 +445,48 @@
   box-shadow: var(--shadow-md);
 }
 
+/* User Type Selection Styles */
+.ucc-user-type-selection {
+    padding: 16px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+}
+
+.user-type-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.user-type-button {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-type-button:hover {
+    background: var(--color-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.user-type-button:active {
+    transform: translateY(0);
+}
+
+.user-type-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .ucc-chat-widget {
