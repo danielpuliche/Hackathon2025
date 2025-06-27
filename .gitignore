@@ -1,0 +1,7 @@
+.github
+.vscode
+__pycache__
+venv
+node_modules
+.env
+chat_histories
